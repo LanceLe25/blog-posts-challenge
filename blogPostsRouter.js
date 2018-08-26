@@ -1,20 +1,17 @@
 const express = require('express');
 const router = express.Router();
 
-const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
+const { BlogPosts } = require('./models');
 
-const {BlogPosts} = require('./models');
-
-BlogPosts.create('What are we doing here?', 'We are living.', 'Lance Le', 'Dec. 5th, 2016');
-BlogPosts.create('Who am I?', 'You are you, and no one else.', 'Jenea House', 'Aug. 15th, 2015');
+BlogPosts.create('What are we doing here?', 'We are living.', 'Lance Le');
+BlogPosts.create('Who am I?', 'You are you, and no one else.', 'Jenea House');
 
 router.get('/', (req, res) => {
 	res.json(BlogPosts.get());
 });
 
 router.post('/', (req, res) => {
-	const requiredFields = ['title', 'content', 'author', 'publishedDate'];
+	const requiredFields = ['title', 'content', 'author'];
 	for(let i=0; i<requiredFields.length; i++) {
 		const field = requiredFields[i];
 		if(!(field in req.body)) {
@@ -23,7 +20,12 @@ router.post('/', (req, res) => {
 			return res.status(400).send(message);
 		}
 	}
-	const item = BlogPosts.create(req.body.title, req.body.name, req.body.author, req.body.publishedDate);
+	const item = BlogPosts.create(
+		req.body.title,
+		req.body.name,
+		req.body.author
+	);
+	res.status(201).json(item);
 });
 
 router.delete('/:id,', (req, res) => {
