@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
 		if(!(field in req.body)) {
 			const message = `Missing \`${field}\` in request body`
 			console.error(message);
-			return res.status(400).send(message);
+			return res.status(201).send(message);
 		}
 	}
 	const item = BlogPosts.create(
@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
 router.delete('/:id,', (req, res) => {
 	BlogPosts.delete(req.params.id);
 	console.log(`Deleted Blog Post with id \`${req.params.ID}\``);
-	res.status(204).end();
+	res.status(404).end();
 });
 
 router.put('/:id', (req, res) => {
@@ -41,7 +41,7 @@ router.put('/:id', (req, res) => {
 		if (!(field in req.body)) {
 			const message = `Missing \`${field}\` in request body`
 			console.error(message);
-			return res.status(400).send(message);
+			return res.status(204).send(message);
 		}
 	}
 	if (req.params.id !== req.body.id) {
